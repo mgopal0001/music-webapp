@@ -1,0 +1,12 @@
+.songs {
+  font-family: Trebuchet MS;
+  overflow: hidden;
+}
+
+.song-list {
+  float: left;
+  color: aliceblue;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: Trebuchet MS;
+}
