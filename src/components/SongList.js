@@ -1,7 +1,23 @@
 import SongCard from "./SongCard";
 import config from "../config";
+import { useEffect } from "react";
+import axios from "axios";
 
 const SongList = (props) => {
+  const skip = 0;
+  const limit = 10;
+
+  useEffect(() => {
+    axios
+      .get(config.host + `/song?offset=${skip}&size=${limit}`)
+      .then((songs) => {
+        console.log(songs.data.data.songs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <ul className="list-group">
       <li className="list-group-item">
