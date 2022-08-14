@@ -1,12 +1,16 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SongList from "./components/SongList";
 import ArtistList from "./components/ArtistList";
 import Footer from "./components/Footer";
 import Popup from "./components/Popup";
 import SaveArtist from "./components/SaveArtist";
 import SaveSong from "./components/SaveSong";
+import Authentication from "./components/Authentication";
+import { get } from "./services/request";
+import config from "./config";
+
 function App() {
   const pages = Object.freeze([
     {
@@ -21,11 +25,22 @@ function App() {
       title: "About",
       id: "about",
     },
+    {
+      title: "Signup",
+      id: "signup"
+    }
   ]);
 
   const [onPage, setOnPage] = useState(pages[0].id);
   const [toggled, setToggled] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const setTokenAndAuthenticate = (uAccessToken, uRefreshToken) => {
+      localStorage.setItem("u-access-token", uAccessToken);
+      localStorage.setItem("u-refresh-token", uRefreshToken);
+      setIsAuthenticated(true);
+  }
 
   const closePopup = () => {
     console.log("close Click");
@@ -53,7 +68,8 @@ function App() {
       return <SongList show={showPopup} close={closePopup} />;
     } else if (onPage === pages[1].id) {
       return <ArtistList show={showPopup} close={closePopup} />;
-    } else {
+    } else if(onPage === pages[3].id) {
+      return <Authentication setTokenAndAuthenticate={setTokenAndAuthenticate} />
     }
   };
 
@@ -64,6 +80,36 @@ function App() {
       return <SaveArtist show={showPopup} close={closePopup} />;
     }
   };
+
+  const setNewAccessToken = async () => {
+    const uRefreshToken = localStorage.getItem('u-refresh-token');
+    const response = await get(`${config.host}/auth/token`, { 'u-refresh-token': uRefreshToken });
+    localStorage.setItem('u-access-token', response.data.uAccessToken);
+  }
+
+  const checkIfAuthenticated = async () => {
+    try{
+      const uAccessToken = localStorage.getItem('u-access-token');
+      const response = await get(`${config.host}/user`, { 'u-access-token': uAccessToken });
+      return true;
+    }catch(err){
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    checkIfAuthenticated().then(response => {
+      if(response){
+        setIsAuthenticated(true);
+      }else{
+        setNewAccessToken().then(() => {
+          setIsAuthenticated(true);
+        }).catch(() => {
+          setIsAuthenticated(false);
+        });
+      }
+    });
+  }, []);
 
   return (
     <>

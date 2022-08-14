@@ -22,11 +22,11 @@ const SaveSong = (props) => {
         </div>
         <div className="user-box">
           <input type="file" name="" required="" className="file" id="file" />
-          <label for="file">Song</label>
+          <label htmlFor="file">Song</label>
         </div>
         <div className="user-box">
           <input type="file" id="file" className="file" text="Select Song" />
-          <label for="file">Song cover</label>
+          <label htmlFor="file">Song cover</label>
         </div>
         <div className="user-box">
           <select name="artist">

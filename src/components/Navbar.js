@@ -24,7 +24,7 @@ const Navbar = (props) => {
           </a>
         ))}
         <a
-          href="javascript:void(0);"
+          href="#"
           className="icon"
           onClick={handleToggleClick}
         >

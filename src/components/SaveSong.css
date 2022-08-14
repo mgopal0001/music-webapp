@@ -13,6 +13,25 @@
   backdrop-filter: blur(10px);
 }
 
+.bottom-section {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  width: 400px;
+  padding: 20px;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.bottom-section a {
+  text-decoration: none;
+}
+
+.bottom-section a:hover {
+  font-size: x-large;
+}
+
 .close-icon {
   position: relative;
   bottom: 100%;
